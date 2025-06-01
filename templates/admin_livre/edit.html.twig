@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier un livre{% endblock %}
+
+{% block navbar %}
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+        <div class="container">
+            <a class="navbar-brand" href="{{ path('admin_dashboard') }}">Admin</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarAdmin">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarAdmin">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="{{ path('admin_dashboard') }}">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ path('admin_livre_index') }}">Livres</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ path('admin_livre_add') }}">Ajouter Livre</a></li>
+                </ul>
+                 <form method="post" action="{{ path('app_logout') }}">
+                <button class="btn btn-outline-light">Déconnexion</button>
+            </form>
+            </div>
+        </div>
+    </nav>
+{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="card shadow-lg border-0 rounded-4 p-4">
+        <h2 class="mb-4 text-center text-primary">Modifier le livre</h2>
+
+        {{ form_start(form, {'attr': {'class': 'needs-validation'}}) }}
+
+        <div class="row g-3">
+            {% for field in form %}
+                {% if field.vars.name != '_token' %}
+                    <div class="col-md-6">
+                        {{ form_label(field, null, {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(field, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(field) }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        <div class="d-grid mt-4">
+            <button class="btn btn-warning btn-lg">
+                <i class="bi bi-save"></i> Mettre à jour
+            </button>
+        </div>
+
+        {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}

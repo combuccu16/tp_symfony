@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails de la commande #{{ commande.id }}{% endblock %}
+
+{% block navbar %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+    <div class="container">
+        <a class="navbar-brand" href="{{ path('user_home') }}">📚 LivreStore</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="{{ path('user_home') }}">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ path('user_livre_index') }}">Livres</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ path('livre_search') }}">Rechercher</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ path('panier_index') }}">Panier</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ path('commande_mes_commandes') }}">Commande</a></li>
+                <li class="nav-item"><a class="nav-link text-danger" href="{{ path('app_login') }}">Déconnexion</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h2>Détails de la commande <span class="text-primary">#{{ commande.id }}</span></h2>
+    <div class="row mt-3 mb-4">
+        <div class="col-md-4">
+            <p><strong>Date :</strong> {{ commande.dateCommande ? commande.dateCommande|date('d/m/Y H:i') : 'N/A' }}</p>
+            <p><strong>Statut :</strong> <span class="badge bg-info text-dark">{{ commande.statut }}</span></p>
+            <p><strong>Total :</strong> <span class="fs-5 text-success">{{ commande.total }} €</span></p>
+        </div>
+    </div>
+
+    <h4>Articles commandés :</h4>
+    <table class="table table-striped table-hover mt-3 align-middle">
+        <thead class="table-primary">
+            <tr>
+                <th>Livre</th>
+                <th>Prix unitaire</th>
+                <th>Quantité</th>
+                <th>Sous-total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ligne in commande.ligneCommandes %}
+                <tr>
+                    <td>{{ ligne.livre.titre }}</td>
+                    <td>{{ ligne.prix }} €</td>
+                    <td>{{ ligne.quantite }}</td>
+                    <td>{{ (ligne.prix * ligne.quantite) | number_format(2, ',', ' ') }} €</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('commande_mes_commandes') }}" class="btn btn-secondary mt-4">← Retour à mes commandes</a>
+</div>
+{% endblock %}
+

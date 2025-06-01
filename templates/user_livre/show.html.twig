@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ livre.titre }}{% endblock %}
+
+{% block navbar %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+    <div class="container">
+        <a class="navbar-brand" href="{{ path('user_home') }}">📚 LivreStore</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="{{ path('user_home') }}">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ path('user_livre_index') }}">Livres</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ path('livre_search') }}">Rechercher</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ path('panier_index') }}">Panier</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ path('commande_mes_commandes') }}">Commande</a></li>
+                <li class="nav-item"><a class="nav-link text-danger" href="{{ path('app_login') }}">Déconnexion</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="card shadow-lg">
+        <div class="card-body">
+            <h2 class="card-title text-center">{{ livre.titre }}</h2>
+            <hr>
+
+            <p><strong>Auteur :</strong> {{ livre.author }}</p>
+            <p><strong>Prix :</strong> {{ livre.price }} €</p>
+            <p><strong>ISBN :</strong> {{ livre.ISBN }}</p>
+            <p><strong>Description :</strong><br>{{ livre.description }}</p>
+            <p><strong>Date de publication :</strong> {{ livre.publicationDate|date('d/m/Y') }}</p>
+
+            {% if livre.stock > 0 %}
+                <form action="{{ path('panier_add') }}" method="POST" class="mt-4" style="max-width: 300px;">
+                    <input type="hidden" name="livreId" value="{{ livre.id }}">
+                    <input type="hidden" name="quantity" value="1">
+                    <input type="hidden" name="_token" value="{{ csrf_token('add-to-cart' ~ livre.id) }}">
+                    <button type="submit" class="btn btn-success w-100">🛒 Ajouter au panier</button>
+                </form>
+            {% else %}
+                <p class="text-danger fw-bold mt-4">Rupture de stock</p>
+            {% endif %}
+
+            <a href="{{ path('user_livre_index') }}" class="btn btn-outline-secondary mt-3">← Retour à la liste</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+

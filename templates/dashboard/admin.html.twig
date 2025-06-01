@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard Admin{% endblock %}
+
+{% block navbar %}
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+        <div class="container">
+            <a class="navbar-brand" href="{{ path('admin_dashboard') }}">Admin</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarAdmin">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarAdmin">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="{{ path('admin_dashboard') }}">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ path('admin_livre_index') }}">Livres</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ path('admin_livre_add') }}">Ajouter Livre</a></li>
+                </ul>
+                <form method="post" action="{{ path('app_logout') }}">
+                <button class="btn btn-outline-light">Déconnexion</button>
+            </form>
+            </div>
+        </div>
+    </nav>
+{% endblock %}
+{% block body %}
+    <!-- Contenu du Dashboard -->
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-10 text-center">
+                <h2 class="mb-4">Bienvenue dans le tableau de bord ADMIN</h2>
+
+                <div class="row">
+                    <div class="col-md-4 mb-4">
+                        <div class="card border-primary shadow">
+                            <div class="card-body">
+                                <h5 class="card-title">Voir les livres</h5>
+                                <p class="card-text">Consultez et gérez la liste des livres.</p>
+                                <a href="{{ path('admin_livre_index') }}" class="btn btn-primary">Accéder</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card border-success shadow">
+                            <div class="card-body">
+                                <h5 class="card-title">Ajouter un livre</h5>
+                                <p class="card-text">Ajoutez un nouveau livre à votre bibliothèque.</p>
+                                <a href="{{ path('admin_livre_add') }}" class="btn btn-success">Ajouter</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card border-warning shadow">
+                            <div class="card-body">
+                                <h5 class="card-title">Statistiques</h5>
+                                <p class="card-text">(Fonctionnalité future) Visualisez les performances.</p>
+                                <a href="#" class="btn btn-warning disabled">À venir</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="mt-5 text-muted">Vous êtes connecté en tant qu'administrateur.</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

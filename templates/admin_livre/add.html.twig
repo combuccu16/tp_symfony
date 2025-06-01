@@ -1,0 +1,96 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter un livre{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="https://unpkg.com/trix@2.0.0/dist/trix.css">
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://unpkg.com/trix@2.0.0/dist/trix.umd.min.js"></script>
+{% endblock %}
+
+{% block navbar %}
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+        <div class="container">
+            <a class="navbar-brand" href="{{ path('admin_dashboard') }}">Admin</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarAdmin">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarAdmin">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="{{ path('admin_dashboard') }}">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ path('admin_livre_index') }}">Livres</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ path('admin_livre_add') }}">Ajouter Livre</a></li>
+                </ul>
+                 <form method="post" action="{{ path('app_logout') }}">
+                <button class="btn btn-outline-light">Déconnexion</button>
+            </form>
+            </div>
+        </div>
+    </nav>
+{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="card shadow-lg border-0 rounded-4 p-4">
+        <h2 class="mb-4 text-center text-primary">Ajouter un nouveau livre</h2>
+
+        {{ form_start(form) }}
+
+        <div class="row g-3">
+            <div class="col-md-6">
+                {{ form_label(form.titre, null, {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(form.titre, {'attr': {'class': 'form-control', 'placeholder': 'Titre du livre'}}) }}
+                {{ form_errors(form.titre) }}
+            </div>
+
+            <div class="col-md-6">
+                {{ form_label(form.author) }}
+                {{ form_widget(form.author, {'attr': {'class': 'form-control', 'placeholder': 'Auteur'}}) }}
+                {{ form_errors(form.author) }}
+            </div>
+
+            <div class="col-md-6">
+                {{ form_label(form.price) }}
+                {{ form_widget(form.price, {'attr': {'class': 'form-control', 'placeholder': 'Prix'}}) }}
+                {{ form_errors(form.price) }}
+            </div>
+
+            <div class="col-md-6">
+                {{ form_label(form.stock) }}
+                {{ form_widget(form.stock, {'attr': {'class': 'form-control', 'placeholder': 'Stock'}}) }}
+                {{ form_errors(form.stock) }}
+            </div>
+
+            <div class="col-md-6">
+                {{ form_label(form.ISBN) }}
+                {{ form_widget(form.ISBN, {'attr': {'class': 'form-control', 'placeholder': 'ISBN'}}) }}
+                {{ form_errors(form.ISBN) }}
+            </div>
+
+            <div class="col-md-6">
+                {{ form_label(form.publicationDate) }}
+                {{ form_widget(form.publicationDate, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.publicationDate) }}
+            </div>
+
+            <div class="col-12">
+                <label for="livre_description" class="form-label">Description</label>
+                <input id="livre_description" type="hidden" name="livre[description]">
+                <trix-editor input="livre_description"></trix-editor>
+            </div>
+        </div>
+
+        <div class="d-grid mt-4">
+            <button type="submit" class="btn btn-primary btn-lg">
+                <i class="bi bi-plus-circle"></i> Ajouter le livre
+            </button>
+        </div>
+
+        {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}

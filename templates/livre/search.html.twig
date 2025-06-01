@@ -1,0 +1,84 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Recherche de livres{% endblock %}
+
+{% block navbar %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+    <div class="container">
+        <a class="navbar-brand" href="{{ path('user_home') }}">MaBibliothèque</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarUser" aria-controls="navbarUser" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarUser">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item"><a class="nav-link" href="{{ path('user_home') }}">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ path('user_livre_index') }}">Livres</a></li>
+                <li class="nav-item"><a class="nav-link active" href="{{ path('livre_search') }}">Rechercher</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ path('panier_index') }}">Panier</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ path('commande_mes_commandes') }}">Commande</a></li>
+            </ul>
+            <a href="{{ path('app_login') }}" class="btn btn-outline-light">Déconnexion</a>
+        </div>
+    </div>
+</nav>
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="card shadow p-4 mb-4">
+        <h2 class="mb-4 text-center text-primary">🔍 Rechercher un livre</h2>
+
+        <form method="get" action="{{ path('livre_search') }}" class="row g-3">
+            <div class="col-md-4">
+                <input type="text" name="q" class="form-control" placeholder="Titre ou description" value="{{ app.request.get('q') }}">
+            </div>
+            <div class="col-md-4">
+                <input type="text" name="author" class="form-control" placeholder="Auteur" value="{{ app.request.get('author') }}">
+            </div>
+            <div class="col-md-2">
+                <input type="number" name="minPrice" class="form-control" placeholder="Prix min" value="{{ app.request.get('minPrice') }}">
+            </div>
+            <div class="col-md-2">
+                <input type="number" name="maxPrice" class="form-control" placeholder="Prix max" value="{{ app.request.get('maxPrice') }}">
+            </div>
+            <div class="col-md-3">
+                <input type="date" name="fromDate" class="form-control" placeholder="Date min" value="{{ app.request.get('fromDate') }}">
+            </div>
+            <div class="col-md-3">
+                <input type="date" name="toDate" class="form-control" placeholder="Date max" value="{{ app.request.get('toDate') }}">
+            </div>
+            <div class="col-md-3">
+                <input type="number" name="stock" class="form-control" placeholder="Stock min" value="{{ app.request.get('stock') }}">
+            </div>
+            <div class="col-md-3 text-end">
+                <button type="submit" class="btn btn-primary w-100">Rechercher</button>
+            </div>
+        </form>
+    </div>
+
+    {% if livres is not empty %}
+        <div class="card p-4 shadow-sm">
+            <h4 class="mb-3 text-success">📚 Résultats trouvés : {{ livres|length }}</h4>
+            <div class="list-group">
+                {% for livre in livres %}
+                    <div class="list-group-item d-flex justify-content-between align-items-start">
+                        <div>
+                            <h5 class="mb-1">{{ livre.titre }}</h5>
+                            <p class="mb-1">Auteur : {{ livre.author }}</p>
+                            <small>Publié le : {{ livre.publicationDate|date('d/m/Y') }}</small>
+                        </div>
+                        <div class="text-end">
+                            <p class="mb-1"><strong>{{ livre.price }} €</strong></p>
+                            <p class="mb-1">Stock : {{ livre.stock }}</p>
+                            <a href="{{ path('user_livre_show', {'id': livre.id}) }}" class="btn btn-outline-primary btn-sm mt-2">Voir plus</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% else %}
+        <p class="text-muted text-center mt-4">Aucun livre trouvé avec les critères sélectionnés.</p>
+    {% endif %}
+</div>
+{% endblock %}

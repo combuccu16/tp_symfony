@@ -1,0 +1,78 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon panier{% endblock %}
+
+{% block navbar %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{{ path('user_home') }}">Espace Utilisateur</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarUser" aria-controls="navbarUser" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarUser">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link" href="{{ path('user_home') }}">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ path('user_livre_index') }}">Livres</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ path('livre_search') }}">Rechercher</a></li>
+                <li class="nav-item"><a class="nav-link active" href="{{ path('panier_index') }}">Panier</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ path('commande_mes_commandes') }}">Commande</a></li>
+            </ul>
+            <a href="{{ path('app_login') }}" class="btn btn-outline-light">Déconnexion</a>
+        </div>
+    </div>
+</nav>
+{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h2 class="mb-4">Mon panier</h2>
+
+    {% if panierItems is not empty %}
+        <div class="table-responsive shadow-sm rounded">
+            <table class="table table-striped align-middle">
+                <thead class="table-primary">
+                    <tr>
+                        <th>Livre</th>
+                        <th>Prix unitaire</th>
+                        <th>Quantité</th>
+                        <th>Sous-total</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in panierItems %}
+                        <tr>
+                            <td>{{ item.livre.titre }}</td>
+                            <td>{{ item.livre.price }} €</td>
+                            <td>{{ item.quantity }}</td>
+                            <td>{{ (item.livre.price * item.quantity) | number_format(2, ',', ' ') }} €</td>
+                            <td>
+                                <form action="{{ path('panier_delete', {'id': item.id}) }}" method="POST" onsubmit="return confirm('Supprimer cet article du panier ?');" class="d-inline">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ item.id) }}">
+                                    <button class="btn btn-danger btn-sm" type="submit" title="Supprimer"><i class="bi bi-trash"></i> Supprimer</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    <tr class="table-secondary fw-bold">
+                        <td colspan="3" class="text-end">Total :</td>
+                        <td>{{ total | number_format(2, ',', ' ') }} €</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="mt-4 text-end">
+            <a href="{{ path('panier_checkout') }}" class="btn btn-success btn-lg">Finaliser la commande</a>
+        </div>
+    {% else %}
+        <div class="alert alert-info text-center">
+            Votre panier est vide.
+        </div>
+        <div class="text-center mt-3">
+            <a href="{{ path('user_livre_index') }}" class="btn btn-primary">Voir nos livres</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

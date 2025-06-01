@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes commandes{% endblock %}
+
+{% block navbar %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+    <div class="container">
+        <a class="navbar-brand" href="{{ path('user_home') }}">MaBibliothèque</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarUser" aria-controls="navbarUser" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarUser">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item"><a class="nav-link" href="{{ path('user_home') }}">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ path('user_livre_index') }}">Livres</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ path('livre_search') }}">Rechercher</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ path('panier_index') }}">Panier</a></li>
+                <li class="nav-item"><a class="nav-link active" href="{{ path('commande_mes_commandes') }}">Commande</a></li>
+            </ul>
+            <a href="{{ path('app_login') }}" class="btn btn-outline-light">Déconnexion</a>
+        </div>
+    </div>
+</nav>
+{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+  <h2 class="mb-4">Mes Commandes</h2>
+
+  {% if commandes is empty %}
+    <div class="alert alert-info">Vous n'avez encore passé aucune commande.</div>
+  {% else %}
+    <div class="table-responsive">
+      <table class="table table-hover align-middle shadow-sm">
+        <thead class="table-light">
+          <tr>
+            <th>#</th>
+            <th>Date</th>
+            <th>Total (€)</th>
+            <th>Statut</th>
+            <th>Détails</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for commande in commandes %}
+          <tr>
+            <td>{{ commande.id }}</td>
+            <td>{{ commande.dateCommande ? commande.dateCommande|date('d/m/Y H:i') : 'N/A' }}</td>
+            <td>{{ commande.total|number_format(2, ',', ' ') }}</td>
+            <td>
+              {% if commande.statut == 'En cours' %}
+                <span class="badge bg-warning text-dark">{{ commande.statut }}</span>
+              {% elseif commande.statut == 'Livrée' %}
+                <span class="badge bg-success">{{ commande.statut }}</span>
+              {% elseif commande.statut == 'Annulée' %}
+                <span class="badge bg-danger">{{ commande.statut }}</span>
+              {% else %}
+                <span class="badge bg-secondary">{{ commande.statut }}</span>
+              {% endif %}
+            </td>
+            <td>
+              <a href="{{ path('commande_show', {id: commande.id}) }}" class="btn btn-sm btn-primary">Voir</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}
+
